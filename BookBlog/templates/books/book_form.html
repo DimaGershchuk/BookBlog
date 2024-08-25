@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Book list{% endblock %}
+
+{% block content %}
+    <div class="add-form">
+        <h1>{% if form.instance.pk %}Редагувати{% else %} Додати{% endif %} книгу</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Зберегти</button>
+        </form>
+        <a href="{% url 'book_list' %}">Повернутись до списку книг</a>
+    </div>
+{% endblock %}

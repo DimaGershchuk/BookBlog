@@ -1,0 +1,16 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="home-container">
+    <div class="hero-section">
+        <h1>Ласкаво просимо на наш сайт!</h1>
+        <p>Досліджуйте, читайте та діліться своїми враженнями про книги!</p>
+        <a href="{% url 'book_list' %}" class="cta-button">Переглянути книги</a>
+    </div>
+    <div class="info-section">
+        <h2>Про нас</h2>
+        <p>Ми створили цей сайт для любителів книг, де кожен може знайти щось для себе. Пориньте у світ літератури разом з нами!</p>
+    </div>
+</div>
+{% endblock %}

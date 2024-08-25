@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}User Authentication{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Вітаю у книжковому блозі!</h1>
+            <nav>
+                <ul class="nav-links">
+                    {% if user.is_authenticated %}
+                        <li class="welcome-text">Привіт, {{ user.username }}</li>
+                        <li><a href="{% url 'logout' %}">Вийти</a></li>
+                        <li><a href="{% url 'book_list' %}">Список книг</a></li>
+                        <li><a href="{% url 'create_book' %}">Додати книгу</a></li>
+
+                    {% else %}
+                        <li><a href="{% url 'home' %}">Домашня сторінка</a></li>
+                        <li><a href="{% url 'login' %}">Логін сторінка</a></li>
+                        <li><a href="{% url 'register' %}">Сторінка реєстрації</a></li>
+                        <li><a href="{% url 'book_list' %}">Список книг</a></li>
+
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="auth-wrapper">
+        <main class="auth-content">
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 My Site</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,479 @@
+/* Загальний скидання стилів */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Стилі для тіла */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Контейнер */
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 10px 0; /* Відступ зверху і знизу */
+}
+
+/* Header Styles */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+}
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+}
+
+header h1 {
+    color: #fff;
+    margin-left: 10px; /* Відступ зліва для заголовка */
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+
+}
+
+.nav-links li {
+    display: inline;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px; /* Збільшення розміру тексту */
+    margin-left: auto;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+
+.welcome-text {
+    display: inline;
+    color: #fff;
+    font-size: 16px; /* Збільшення розміру тексту */
+}
+
+/* Заголовки */
+h1, h2, h3 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 0.5em;
+}
+
+h2 {
+    font-size: 2em;
+    margin-bottom: 0.75em;
+}
+
+h3 {
+    font-size: 1.75em;
+    margin-bottom: 0.75em;
+}
+
+/* Стилі для Головної сторінки */
+.hero-section {
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 60px 20px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.hero-section h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero-section p {
+    font-size: 24px;
+    margin-bottom: 40px;
+}
+
+.cta-button {
+    padding: 15px 30px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 18px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Інформаційний розділ */
+.info-section {
+    margin-top: 40px;
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.info-section h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.info-section p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #666;
+}
+
+/* Загальні стилі для контейнера */
+.home-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Форма аутентифікації */
+.auth-wrapper {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.auth-content {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.form-content {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label[for="id_username"],
+label[for="id_password"],
+label[for="id_email"],
+label[for="id_age"],
+label[for="id_gender"],
+label[for="id_password1"]{
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 16px;
+}
+
+.form-input {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.register_btn,
+.login_btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.register_btn:hover,
+.login_btn:hover {
+    background-color: #0056b3;
+}
+
+/* Фільтр форма */
+.filter-form {
+    margin-bottom: 20px;
+}
+
+.filter-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-form label {
+    margin-bottom: 5px;
+}
+
+.filter-form input {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.filter-form button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.filter-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Форма для додавання */
+
+.add-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-form h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 16px;
+}
+
+form input[type="text"],
+form input[type="number"],
+form textarea,
+form select {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+form input[type="text"]:focus,
+form input[type="number"]:focus,
+form textarea:focus,
+form select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+a {
+    display: block;
+    text-align: center;
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+/* Список книг */
+.book-list {
+    margin : 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.book-item {
+    margin-bottom: 10px;
+}
+
+.book-item a {
+    margin: 5px;
+    color: #007bff;
+}
+
+/* Пагінація */
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.step-links a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #007bff;
+}
+
+.step-links a:hover {
+    text-decoration: underline;
+}
+
+
+/* Деталі книги */
+.book-detail {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+/* Заголовок книги */
+.book-detail h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* Інформація про книгу */
+.book-detail p {
+    margin-bottom: 10px;
+}
+
+/* Список відгуків */
+.book-detail ul {
+
+    list-style-type: none;
+    padding: 0;
+}
+
+.book-detail li {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.book-detail li:last-child {
+    border-bottom: none;
+}
+
+/* Рейтинг */
+.book-detail strong {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: #007bff;
+}
+
+/* Коментарі */
+.book-detail p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+/* Дата коментаря */
+.book-detail em {
+    color: #666;
+    font-style: italic;
+}
+
+/* Форма відгуків */
+.book-detail form {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.book-detail form h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.book-detail form button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.book-detail form button:hover {
+    background-color: #0056b3;
+}
+
+
+
+/* Футер */
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 2rem;
+    border-top: 4px solid #007bff; /* Додамо межу для розмежування футера та контенту */
+}
+
+footer p {
+    margin: 0;
+}

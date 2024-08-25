@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Деталі книги{% endblock %}
+
+{% block content %}
+    <div class="book-detail">
+        <h1>{{ book.title }}</h1>
+        <p>Автор: {{ book.author.name }}</p>
+        <p>Жанр: {{ book.genre.name }}</p>
+        <p>Рейтинг: {{ book.rating }}</p>
+        <p>Опис: {{ book.description }}</p>
+
+        <h2>Відгуки:</h2>
+        {% if reviews %}
+            <ul>
+                {% for review in reviews %}
+                    <li>
+                        <strong>Оцінка: {{ review.rating }}</strong>
+                        <p>Коментар: {{ review.comment }}</p>
+                        <p><em>Додано: {{ review.created_at }}</em></p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Немає відгуків.</p>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            <h2>Залишити відгук:</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Додати відгук</button>
+            </form>
+
+            <!-- Редагування оцінки -->
+            {% if reviews %}
+                <ul>
+                    {% for review in reviews %}
+                        <li>
+                            <a href="{% url 'edit_rating' review.pk %}">Редагувати оцінку №{{ forloop.counter }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Немає відгуків для редагування оцінки.</p>
+            {% endif %}
+            <!-- Редагування книги -->
+            <a href="{% url 'update_book' pk=book.pk %}">Редагувати книгу</a>
+        {% endif %}
+    </div>
+{% endblock %}

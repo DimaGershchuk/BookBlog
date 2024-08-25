@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Список доступних книг{% endblock %}
+
+{% block content %}
+
+    <h1>Список доступних книг</h1>
+
+    <div class="book-list">
+        {% for book in books %}
+            <div class="book-item">
+                    <h2><a href=" {% url 'book_detail' book.pk %}">{{ book.title }}</a></h2>
+            </div>
+        {% empty %}
+            <p>Книги не знайдено.</p>
+        {% endfor %}
+    </div>
+
+
+    <div class="filter-form">
+        <h2>Форма фільтрації книг</h2>
+        <form method="GET" action="">
+            <label for="genre">Жанр:</label>
+            <input type="text" id="genre" name="genre" value="{{ request.GET.genre }}">
+
+            <label for="author">Автор:</label>
+            <input type="text" id="author" name="author" value="{{ request.GET.author }}">
+
+            <label for="rating">Рейтинг від:</label>
+            <input type="number" id="rating" name="rating" step="0.5" value="{{ request.GET.rating }}">
+
+            <button type="submit">Фільтрувати</button>
+        </form>
+    </div>
+
+
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1&{% if request.GET.genre %}genre={{ request.GET.genre }}&{% endif %}{% if request.GET.author %}author={{ request.GET.author }}&{% endif %}{% if request.GET.rating %}rating={{ request.GET.rating }}&{% endif %}">Перша сторінка</a>
+                <a href="?page={{ page_obj.previous_page_number }}&{% if request.GET.genre %}genre={{ request.GET.genre }}&{% endif %}{% if request.GET.author %}author={{ request.GET.author }}&{% endif %}{% if request.GET.rating %}rating={{ request.GET.rating }}&{% endif %}">Попередня сторінка</a>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&{% if request.GET.genre %}genre={{ request.GET.genre }}&{% endif %}{% if request.GET.author %}author={{ request.GET.author }}&{% endif %}{% if request.GET.rating %}rating={{ request.GET.rating }}&{% endif %}">Наступна сторінка</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}&{% if request.GET.genre %}genre={{ request.GET.genre }}&{% endif %}{% if request.GET.author %}author={{ request.GET.author }}&{% endif %}{% if request.GET.rating %}rating={{ request.GET.rating }}&{% endif %}">Остання сторінка</a>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}
