@@ -7,7 +7,7 @@
         <h1>{{ book.title }}</h1>
         <p>Автор: {{ book.author.name }}</p>
         <p>Жанр: {{ book.genre.name }}</p>
-        <p>Рейтинг: {{ book.rating }}</p>
+        <p>Рейтинг: {{ book.calculate_rating }}</p>
         <p>Опис: {{ book.description }}</p>
 
         <h2>Відгуки:</h2>
@@ -15,7 +15,7 @@
             <ul>
                 {% for review in reviews %}
                     <li>
-                        <strong>Оцінка: {{ review.rating }}</strong>
+                        <p><strong>Автор відгуку: {{review.author.username}}</strong>Оцінка: {{ review.rating }}</p>
                         <p>Коментар: {{ review.comment }}</p>
                         <p><em>Додано: {{ review.created_at }}</em></p>
                     </li>

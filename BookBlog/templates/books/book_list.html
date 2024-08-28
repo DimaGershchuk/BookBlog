@@ -9,7 +9,7 @@
     <div class="book-list">
         {% for book in books %}
             <div class="book-item">
-                    <h2><a href=" {% url 'book_detail' book.pk %}">{{ book.title }}</a></h2>
+                    <h2><a href=" {% url 'book_detail' book.pk %}">{{ book.title }} : {{book.author.name}}</a></h2>
             </div>
         {% empty %}
             <p>Книги не знайдено.</p>
@@ -26,8 +26,11 @@
             <label for="author">Автор:</label>
             <input type="text" id="author" name="author" value="{{ request.GET.author }}">
 
-            <label for="rating">Рейтинг від:</label>
-            <input type="number" id="rating" name="rating" step="0.5" value="{{ request.GET.rating }}">
+            <label for="min_rating">Мінімальний рейтинг</label>
+            <input type="number" name="min_rating" value="{{ request.GET.min_rating }}">
+
+            <label for="max_rating">Максимальний рейтинг рейтинг</label>
+            <input type="number" name="max_rating" value="{{ request.GET.max_rating }}">
 
             <button type="submit">Фільтрувати</button>
         </form>
