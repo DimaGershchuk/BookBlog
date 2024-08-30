@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <h1>Список доступних книг</h1>
+    <h1>Список книг</h1>
 
     <div class="book-list">
         {% for book in books %}
@@ -14,8 +14,24 @@
         {% empty %}
             <p>Книги не знайдено.</p>
         {% endfor %}
+
     </div>
 
+    <div class="genre-list">
+        <h2>Доступні автори:</h2>
+            <ul>
+                {% for author in authors %}
+                    <li>{{ author.name }}</li>
+                {% endfor %}
+            </ul>
+
+            <h2>Доступні жанри:</h2>
+            <ul>
+                {% for genre in genres %}
+                    <li>{{ genre.name }}</li>
+                {% endfor %}
+            </ul>
+    </div>
 
     <div class="filter-form">
         <h2>Форма фільтрації книг</h2>
@@ -27,10 +43,10 @@
             <input type="text" id="author" name="author" value="{{ request.GET.author }}">
 
             <label for="min_rating">Мінімальний рейтинг</label>
-            <input type="number" name="min_rating" value="{{ request.GET.min_rating }}">
+            <input type="number" name="min_rating" value="{{ request.GET.min_rating }}" min="1" max="10">
 
-            <label for="max_rating">Максимальний рейтинг рейтинг</label>
-            <input type="number" name="max_rating" value="{{ request.GET.max_rating }}">
+            <label for="max_rating">Максимальний рейтинг</label>
+            <input type="number" name="max_rating" value="{{ request.GET.max_rating }}" min="1" max="10">
 
             <button type="submit">Фільтрувати</button>
         </form>

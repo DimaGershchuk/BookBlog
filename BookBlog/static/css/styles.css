@@ -347,6 +347,44 @@ a {
 a:hover {
     text-decoration: underline;
 }
+.genre-list {
+    margin-top: 30px;
+}
+
+.genre-list h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.genre-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.genre-list ul li {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 8px;
+    transition: background-color 0.3s ease;
+    font-size: 1.1em;
+}
+
+.genre-list ul li:hover {
+    background-color: #e9ecef;
+}
+
+.genre-list ul li a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.genre-list ul li a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
 
 /* Список книг */
 .book-list {

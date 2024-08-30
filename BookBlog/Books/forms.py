@@ -1,22 +1,34 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import Comments, Book, Author, Genre
+from .models import Comments, Book, Author, Genre, Rating
 
 
 class CommentsForm(forms.ModelForm):
-    rating = forms.IntegerField(label='Оцінка', widget=forms.NumberInput(attrs={'class': 'form-input'}))
     comment = forms.CharField(label='Коментар', widget=forms.TextInput(attrs={'class': 'form-input'}))
 
     class Meta:
         model = Comments
-        fields = ['rating', 'comment']
+        fields = ['comment']
 
 
 class EditRatingForm(forms.ModelForm):
-    rating = forms.IntegerField(label='Новий рейтинг', widget=forms.NumberInput(attrs={'class': 'form-input'}))
+    rating = forms.IntegerField(label='Нова оцінка', widget=forms.NumberInput(attrs={'class': 'form-input'}), min_value=1, max_value=10)
 
     class Meta:
         model = Comments
+        fields = ['rating']
+
+
+class RatingForm(forms.ModelForm):
+    rating = forms.IntegerField(
+        label='Оцінка',
+        widget=forms.NumberInput(attrs={'class': 'form-input'}),
+        min_value=1,
+        max_value=10
+    )
+
+    class Meta:
+        model = Rating
         fields = ['rating']
 
 

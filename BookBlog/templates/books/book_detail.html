@@ -7,7 +7,7 @@
         <h1>{{ book.title }}</h1>
         <p>Автор: {{ book.author.name }}</p>
         <p>Жанр: {{ book.genre.name }}</p>
-        <p>Рейтинг: {{ book.calculate_rating }}</p>
+        <p>Рейтинг: {{ book.average_rating }}</p>
         <p>Опис: {{ book.description }}</p>
 
         <h2>Відгуки:</h2>
@@ -15,36 +15,44 @@
             <ul>
                 {% for review in reviews %}
                     <li>
-                        <p><strong>Автор відгуку: {{review.author.username}}</strong>Оцінка: {{ review.rating }}</p>
+                        <p><strong>Автор відгуку: {{review.author.username}}</strong></p>
                         <p>Коментар: {{ review.comment }}</p>
                         <p><em>Додано: {{ review.created_at }}</em></p>
+
+                            {% if user_rating %}
+                            <p>Ваша оцінка: {{ user_rating.rating }}</p>
+                                 {% if review.author == user %}
+                                    <a href="{% url 'edit_rating' user_rating.pk %}">Редагувати оцінку</a>
+                                 {% endif %}
+                           {% else %}
+                                <p>Ви ще не оцінили цю книгу.</p>
+                            {% endif %}
                     </li>
+
                 {% endfor %}
             </ul>
         {% else %}
             <p>Немає відгуків.</p>
         {% endif %}
 
+
+
+
         {% if user.is_authenticated %}
             <h2>Залишити відгук:</h2>
             <form method="post">
                 {% csrf_token %}
-                {{ form.as_p }}
+                {{ comments_form.as_p }}
                 <button type="submit">Додати відгук</button>
             </form>
 
-            <!-- Редагування оцінки -->
-            {% if reviews %}
-                <ul>
-                    {% for review in reviews %}
-                        <li>
-                            <a href="{% url 'edit_rating' review.pk %}">Редагувати оцінку №{{ forloop.counter }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>Немає відгуків для редагування оцінки.</p>
-            {% endif %}
+            <h2>Оцінити книгу:</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ rating_form.as_p }}
+                <button type="submit">Оцінити</button>
+            </form>
+
             <!-- Редагування книги -->
             <a href="{% url 'update_book' pk=book.pk %}">Редагувати книгу</a>
         {% endif %}
