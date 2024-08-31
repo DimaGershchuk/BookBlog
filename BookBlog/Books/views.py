@@ -37,9 +37,17 @@ def book_list(request):
 
 def book_detail(request, pk):
     book = get_object_or_404(Book, pk=pk)
-    reviews = book.reviews.all()
+    reviews = book.reviews.select_related('author').all()  # Отримання всіх відгуків з автором
 
     user_rating = Rating.objects.filter(user=request.user, book=book).first() if request.user.is_authenticated else None
+
+    reviews_with_ratings = [
+        {
+            'review': review,
+            'rating': Rating.objects.filter(user=review.author, book=book).first()
+        }
+        for review in reviews
+    ]
 
     if request.method == 'POST':
         comments_form = CommentsForm(request.POST)
@@ -64,7 +72,7 @@ def book_detail(request, pk):
         comments_form = CommentsForm()
         rating_form = RatingForm()
 
-    return render(request, 'books/book_detail.html', {'book': book, 'reviews': reviews, 'comments_form': comments_form, 'rating_form': rating_form, 'user_rating': user_rating})
+    return render(request, 'books/book_detail.html', {'book': book,  'reviews_with_ratings': reviews_with_ratings, 'reviews': reviews, 'comments_form': comments_form, 'rating_form': rating_form, 'user_rating': user_rating})
 
 
 def edit_rating(request, pk):

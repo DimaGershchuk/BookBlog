@@ -10,31 +10,29 @@
         <p>Рейтинг: {{ book.average_rating }}</p>
         <p>Опис: {{ book.description }}</p>
 
-        <h2>Відгуки:</h2>
-        {% if reviews %}
+      <h2>Відгуки:</h2>
+        {% if reviews_with_ratings %}
             <ul>
-                {% for review in reviews %}
+                {% for item in reviews_with_ratings %}
                     <li>
-                        <p><strong>Автор відгуку: {{review.author.username}}</strong></p>
-                        <p>Коментар: {{ review.comment }}</p>
-                        <p><em>Додано: {{ review.created_at }}</em></p>
+                        <p><strong>Автор відгуку: {{ item.review.author.username }}</strong></p>
+                        <p>Коментар: {{ item.review.comment }}</p>
+                        <p><em>Додано: {{ item.review.created_at }}</em></p>
 
-                            {% if user_rating %}
-                            <p>Ваша оцінка: {{ user_rating.rating }}</p>
-                                 {% if review.author == user %}
-                                    <a href="{% url 'edit_rating' user_rating.pk %}">Редагувати оцінку</a>
-                                 {% endif %}
-                           {% else %}
-                                <p>Ви ще не оцінили цю книгу.</p>
+                        {% if item.rating %}
+                            <p>Оцінка : {{ item.rating.rating }}</p>
+                            {% if item.review.author == user %}
+                                <a href="{% url 'edit_rating' item.rating.pk %}">Редагувати оцінку</a>
                             {% endif %}
+                        {% else %}
+                            <p>Цей користувач ще не оцінив цю книгу.</p>
+                        {% endif %}
                     </li>
-
                 {% endfor %}
             </ul>
         {% else %}
             <p>Немає відгуків.</p>
         {% endif %}
-
 
 
 
