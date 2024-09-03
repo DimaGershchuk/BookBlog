@@ -9,11 +9,11 @@ class CustomUserCreationForm(UserCreationForm):
     age = forms.IntegerField(label='Вік', widget=forms.NumberInput(attrs={'class': 'form-input'}))
     gender = forms.ChoiceField(label='Стать', choices=[('male', 'Чоловік'), ('female', 'Жінка')], widget=forms.Select(attrs={'class': 'form-input'}))
     password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
-
+    password2 = forms.CharField(label='Підтвердження паролю', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'age', 'gender', 'password1')
+        fields = ('username', 'email', 'age', 'gender', 'password1','password2' )
 
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-input'}),
@@ -21,11 +21,8 @@ class CustomUserCreationForm(UserCreationForm):
             'age': forms.NumberInput(attrs={'class': 'form-input'}),
             'gender': forms.Select(attrs={'class': 'form-control'}),
             'password1': forms.PasswordInput(attrs={'class': 'form-input'}),
+            'password2': forms.PasswordInput(attrs={'class': 'form-input'})
         }
-
-    def __init__(self, *args, **kwargs):
-        super(CustomUserCreationForm, self).__init__(*args, **kwargs)
-        del self.fields['password2']
 
 
 class CustomUserChangeForm(UserChangeForm):
