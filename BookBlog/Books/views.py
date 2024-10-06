@@ -3,8 +3,13 @@ from django.core.paginator import Paginator
 from django.db.models import Avg
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
+from rest_framework import viewsets, permissions, generics
+from .filters import BookFilter
 from .models import Genre, Author, Book, Comments, Rating
 from .forms import CommentsForm, EditRatingForm, BookForm, RatingForm
+from .serializers import GenreSerializer, AuthorSerializer, BookSerializer, CommentSerializer, RatingSerializer
+from .pagination import MyPageNumberPagination
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 def book_list(request):
@@ -118,7 +123,54 @@ def update_book(request, pk):
     return render(request, 'books/book_form.html', {'form': form})
 
 
+class GenreViewSet(viewsets.ModelViewSet):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+
+class AuthorViewSet(viewsets.ModelViewSet):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    pagination_class = MyPageNumberPagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = BookFilter
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comments.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+
+class RatingViewSet(viewsets.ModelViewSet):
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class BookByGenreView(generics.ListAPIView):
+    serializer_class = BookSerializer
+
+    def get_queryset(self):
+        genre_id = self.kwargs['genre_id']
+        return Book.objects.filter(genre_id=genre_id)  # Фільтрація книг за жанром
 
 
 

@@ -39,7 +39,24 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Users.apps.UsersConfig',
     'Books.apps.BooksConfig',
+    'django_filters',
+    'csp',
+    'rest_framework'
 ]
+
+REST_FRAMEWORK = {
+
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+
+    'DEFAULT_PAGINATION_CLASS': 'Books.pagination.MyPageNumberPagination',
+    'PAGE_SIZE': 3,
+
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+
+
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -49,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'BookBlog.urls'
@@ -133,3 +151,20 @@ AUTH_USER_MODEL = 'Users.CustomUser'
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+
+#  SECURE_SSL_REDIRECT = True
+#  SESSION_COOKIE_SECURE = True
+#  CSRF_COOKIE_SECURE = True
+
+#  SECURE_HSTS_SECONDS = 31557600
+#  SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#  SECURE_HSTS_PRELOAD = True
+
+#  SESSION_COOKIE_SAMESITE = 'Lax'
+#  CSRF_COOKIE_SAMESITE = 'Lax'
+
+#  SESSION_COOKIE_AGE = 1209600
+
+#  CSP_DEFAULT_SRC = ["'self'"]
+
