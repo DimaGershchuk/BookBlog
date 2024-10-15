@@ -7,9 +7,11 @@ from .serializers import BookSerializer
 
 # Клас для фільтрації
 class BookFilter(filters.FilterSet):
-    genre = filters.NumberFilter(field_name='genre__id')  # Фільтр за жанром
-    author = filters.NumberFilter(field_name='author__id')  # Фільтр за автором  # Фільтр за користувачем, який додав
+    genre = filters.CharFilter(field_name='genre__name', lookup_expr='icontains')
+    author = filters.CharFilter(field_name='author__name', lookup_expr='icontains')
+    publication_date = filters.DateFromToRangeFilter(field_name='publication_date')
+
 
     class Meta:
         model = Book
-        fields = ['genre', 'author']
+        fields = ['genre', 'author', 'publication_date']

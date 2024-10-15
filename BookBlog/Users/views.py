@@ -5,9 +5,10 @@ from django.contrib.auth import logout
 from .forms import CustomUserCreationForm, LoginUserForm
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics
 from .models import CustomUser
 from .serializers import CustomUserSerializer, CustomUserCreateSerializer
+from .permissions import IsSuperUserOrReadOnly
 
 
 def home_view(request):
@@ -35,15 +36,18 @@ def logout_user(request):
     return redirect('login')
 
 
-class CustomUserViewSet(viewsets.ModelViewSet):
+class CustomUserListCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsSuperUserOrReadOnly]
 
     def get_serializer_class(self):
-        # Використовуємо інший серіалізатор для створення користувача
-        if self.action == 'create':
+        if self.request.method == 'POST':
             return CustomUserCreateSerializer
         return CustomUserSerializer
 
+
+class CustomUserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CustomUser.objects.all()
+    permission_classes = [IsSuperUserOrReadOnly]
+    serializer_class = CustomUserSerializer
 
