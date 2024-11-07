@@ -100,7 +100,7 @@ def create_book(request):
         form = BookForm(request.POST)
         if form.is_valid():
             book = form.save(commit=False)
-            book.created_by = request.user  # Зберігаємо автора публікації
+            book.created_by = request.user
             book.save()
             return redirect('book_detail', pk=book.pk)
     else:

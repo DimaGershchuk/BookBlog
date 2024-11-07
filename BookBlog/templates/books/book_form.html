@@ -4,12 +4,12 @@
 
 {% block content %}
     <div class="add-form">
-        <h1>{% if form.instance.pk %}Редагувати{% else %} Додати{% endif %} книгу</h1>
+        <h1>{% if form.instance.pk %}Edit{% else %} Add{% endif %} book</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Зберегти</button>
+            <button type="submit">Save</button>
         </form>
-        <a href="{% url 'book_list' %}">Повернутись до списку книг</a>
+        <a href="{% url 'book_list' %}">Back to book list</a>
     </div>
 {% endblock %}

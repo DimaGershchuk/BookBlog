@@ -4,7 +4,7 @@ from .models import Comments, Book, Author, Genre, Rating
 
 
 class CommentsForm(forms.ModelForm):
-    comment = forms.CharField(label='Коментар', widget=forms.TextInput(attrs={'class': 'form-input'}))
+    comment = forms.CharField(label='Comment', widget=forms.TextInput(attrs={'class': 'form-input'}))
 
     class Meta:
         model = Comments
@@ -12,7 +12,7 @@ class CommentsForm(forms.ModelForm):
 
 
 class EditRatingForm(forms.ModelForm):
-    rating = forms.IntegerField(label='Нова оцінка', widget=forms.NumberInput(attrs={'class': 'form-input'}), min_value=1, max_value=10)
+    rating = forms.IntegerField(label='New rate', widget=forms.NumberInput(attrs={'class': 'form-input'}), min_value=1, max_value=10)
 
     class Meta:
         model = Comments
@@ -21,7 +21,7 @@ class EditRatingForm(forms.ModelForm):
 
 class RatingForm(forms.ModelForm):
     rating = forms.IntegerField(
-        label='Оцінка',
+        label='Rate',
         widget=forms.NumberInput(attrs={'class': 'form-input'}),
         min_value=1,
         max_value=10
@@ -33,31 +33,31 @@ class RatingForm(forms.ModelForm):
 
 
 class BookForm(forms.ModelForm):
-    title = forms.CharField(label='Назва книги', widget=forms.TextInput(attrs={'class': 'form-input'}))
+    title = forms.CharField(label='Book name', widget=forms.TextInput(attrs={'class': 'form-input'}))
     author = forms.ModelChoiceField(
         queryset=Author.objects.all(),
-        label='Оберіть автора',
+        label='Select author',
         widget=forms.Select(attrs={'class': 'form-input'}),
         required=False
     )
     new_author = forms.CharField(
-        label='Або введіть нового автора',
+        label='Or put new author',
         widget=forms.TextInput(attrs={'class': 'form-input'}),
         required=False
     )
     genre = forms.ModelChoiceField(
         queryset=Genre.objects.all(),
-        label='Оберіть жанр',
+        label='Select genre',
         widget=forms.Select(attrs={'class': 'form-input'}),
         required=False
     )
     new_genre = forms.CharField(
-        label='Або введіть новий жанр',
+        label='Or put new genre',
         widget=forms.TextInput(attrs={'class': 'form-input'}),
         required=False
     )
 
-    description = forms.CharField(label='Опис книги', widget=forms.TextInput(attrs={'class': 'form-input'}))
+    description = forms.CharField(label='Boo description', widget=forms.TextInput(attrs={'class': 'form-input'}))
 
     class Meta:
         model = Book
@@ -73,7 +73,7 @@ class BookForm(forms.ModelForm):
 
         # Перевірка на обрання або створення нового автора
         if not author and not new_author:
-            raise ValidationError("Будь ласка, оберіть автора або введіть нового автора.")
+            raise ValidationError("Please selecr or create new author")
 
         # Вибір автора: існуючого або нового
         selected_author = author
@@ -82,11 +82,11 @@ class BookForm(forms.ModelForm):
 
         # Перевірка на дублювання книги з обраним або новим автором
         if Book.objects.filter(title=title, author=selected_author).exclude(pk=self.instance.pk).exists():
-            raise ValidationError("Книга з такою назвою і автором вже існує в каталозі.")
+            raise ValidationError("Book whith this name and author already exists")
 
         # Перевірка на обрання або створення нового жанру
         if not genre and not new_genre:
-            raise ValidationError("Будь ласка, оберіть жанр або введіть новий жанр.")
+            raise ValidationError("Please select or create new genre")
 
         return cleaned_data
 

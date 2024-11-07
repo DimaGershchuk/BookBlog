@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}Редагувати оцінку{% endblock %}
+{% block title %}Edit rate{% endblock %}
 
 {% block content %}
-    <h1>Редагувати оцінку</h1>
+    <h1>Edit rate</h1>
 
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Зберегти</button>
+        <button type="submit">Save</button>
     </form>
 {% endblock %}

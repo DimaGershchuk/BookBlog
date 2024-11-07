@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title %}Список доступних книг{% endblock %}
+{% block title %}Available books{% endblock %}
 
 {% block content %}
 
-    <h1>Список книг</h1>
+    <h1>Book list</h1>
 
     <div class="book-list">
         {% for book in books %}
@@ -12,43 +12,49 @@
                     <h2><a href=" {% url 'book_detail' book.pk %}">{{ book.title }} : {{book.author.name}}</a></h2>
             </div>
         {% empty %}
-            <p>Книги не знайдено.</p>
+            <p>Books not found.</p>
         {% endfor %}
 
     </div>
 
     <div class="genre-list">
-        <h2>Доступні автори:</h2>
+        <h2>Available authors:</h2>
             <ul>
                 {% for author in authors %}
                     <li>{{ author.name }}</li>
-                {% endfor %}
-            </ul>
 
-            <h2>Доступні жанри:</h2>
+                {% empty %}
+            <p>Authors not found.</p>
+                {% endfor %}
+                </ul>
+
+            <h2>Available genres:</h2>
             <ul>
                 {% for genre in genres %}
                     <li>{{ genre.name }}</li>
+
+                {% empty %}
+                    <p>Genres not found.</p>
                 {% endfor %}
             </ul>
     </div>
 
     <div class="filter-form">
-        <h2>Форма фільтрації книг</h2>
+        <h2>Filter : </h2>
         <form method="GET" action="">
-            <label for="genre">Жанр:</label>
+            <label for="genre">Genre:</label>
             <input type="text" id="genre" name="genre" value="{{ request.GET.genre }}">
 
-            <label for="author">Автор:</label>
+            <label for="author">Author:</label>
             <input type="text" id="author" name="author" value="{{ request.GET.author }}">
 
-            <label for="min_rating">Мінімальний рейтинг</label>
+            <label for="min_rating">Minimal rate</label>
             <input type="number" name="min_rating" value="{{ request.GET.min_rating }}" min="1" max="10">
 
-            <label for="max_rating">Максимальний рейтинг</label>
+            <label for="max_rating">Maximum rate</label>
             <input type="number" name="max_rating" value="{{ request.GET.max_rating }}" min="1" max="10">
 
-            <button type="submit">Фільтрувати</button>
+            <button type="submit">Filter</button>
         </form>
     </div>
 

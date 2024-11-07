@@ -4,12 +4,12 @@ from .models import CustomUser
 
 
 class CustomUserCreationForm(UserCreationForm):
-    username = forms.CharField(label='Ім`я користувача', widget=forms.TextInput(attrs={'class': 'form-input'}))
+    username = forms.CharField(label='Name', widget=forms.TextInput(attrs={'class': 'form-input'}))
     email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class': 'form-input'}))
-    age = forms.IntegerField(label='Вік', widget=forms.NumberInput(attrs={'class': 'form-input'}))
-    gender = forms.ChoiceField(label='Стать', choices=[('male', 'Чоловік'), ('female', 'Жінка')], widget=forms.Select(attrs={'class': 'form-input'}))
-    password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
-    password2 = forms.CharField(label='Підтвердження паролю', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
+    age = forms.IntegerField(label='Age', widget=forms.NumberInput(attrs={'class': 'form-input'}))
+    gender = forms.ChoiceField(label='Sex', choices=[('male', 'Male'), ('female', 'Female')], widget=forms.Select(attrs={'class': 'form-input'}))
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
+    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
 
     class Meta:
         model = CustomUser
@@ -39,7 +39,7 @@ class CustomUserChangeForm(UserChangeForm):
 
 
 class LoginUserForm(AuthenticationForm):
-    username = forms.CharField(label='Логін', widget=forms.TextInput(attrs={'class': 'form-input'}))
-    password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
+    username = forms.CharField(label='Login', widget=forms.TextInput(attrs={'class': 'form-input'}))
+    password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
 
 
