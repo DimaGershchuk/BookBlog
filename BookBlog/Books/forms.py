@@ -59,9 +59,11 @@ class BookForm(forms.ModelForm):
 
     description = forms.CharField(label='Boo description', widget=forms.TextInput(attrs={'class': 'form-input'}))
 
+    image = forms.ImageField()
+
     class Meta:
         model = Book
-        fields = ['title', 'author', 'new_author', 'genre', 'new_genre', 'description']
+        fields = ['title', 'author', 'new_author', 'genre', 'new_genre', 'description', 'image']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -73,7 +75,7 @@ class BookForm(forms.ModelForm):
 
         # Перевірка на обрання або створення нового автора
         if not author and not new_author:
-            raise ValidationError("Please selecr or create new author")
+            raise ValidationError("Please select or create new author")
 
         # Вибір автора: існуючого або нового
         selected_author = author

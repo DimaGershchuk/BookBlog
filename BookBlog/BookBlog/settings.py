@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import mimetypes
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,11 +40,22 @@ INSTALLED_APPS = [
     'Users.apps.UsersConfig',
     'Books.apps.BooksConfig',
     'django_filters',
+    'debug_toolbar',
     'csp',
-    'rest_framework'
+    'rest_framework',
+    'rest_framework.authtoken',
+    'imagekit'
 ]
 
+INTERNAL_IPS = ['127.0.0.1']
+
+mimetypes.add_type("application/javascript", ".js", True)
+
 REST_FRAMEWORK = {
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
 
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -66,6 +77,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'csp.middleware.CSPMiddleware',
 ]
 
@@ -86,6 +98,16 @@ TEMPLATES = [
         },
     },
 ]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
 
 WSGI_APPLICATION = 'BookBlog.wsgi.application'
 
@@ -134,6 +156,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+# IMAGEKIT_CACHEFILE_DIR = 'CACHE/processed_images'
+
 
 STATIC_URL = '/static/'
 

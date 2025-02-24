@@ -1,9 +1,11 @@
-from django.core.exceptions import PermissionDenied
+from django.core.cache import cache
 from django.core.paginator import Paginator
-from django.db.models import Avg
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.decorators import method_decorator
+from django_ratelimit.decorators import ratelimit
 from rest_framework import viewsets, permissions, generics
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from .models import Genre, Author, Book, Comments, Rating
 from .forms import CommentsForm, EditRatingForm, BookForm, RatingForm
 from .serializers import GenreSerializer, AuthorSerializer, BookSerializer, CommentSerializer, RatingSerializer
@@ -12,44 +14,57 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .filters import BookFilter
 
 
+@ratelimit(key='ip', rate='10/m', block=True)
 def book_list(request):
+    genre_param = request.GET.get('genre', '')
+    author_param = request.GET.get('author', '')
+    min_rating = request.GET.get('min_rating', '')
+    max_rating = request.GET.get('max_rating', '')
 
-    books = Book.objects.all()
+    cache_key = f"book_list_{genre_param}_{author_param}_{min_rating}_{max_rating}"
+    books = cache.get(cache_key)
+
+    if books is None:
+        books = Book.objects.select_related('author', 'genre').all()
+        if genre_param:
+            books = books.filter(genre__name__icontains=genre_param)
+        if author_param:
+            books = books.filter(author__name__icontains=author_param)
+        if min_rating:
+            books = books.filter(average_rating__gte=min_rating)
+        if max_rating:
+            books = books.filter(average_rating__lte=max_rating)
+        books = list(books)
+        cache.set(cache_key, books, timeout=900)
 
     authors = Author.objects.all()
     genres = Genre.objects.all()
-
-    genre = request.GET.get('genre')
-    author = request.GET.get('author')
-    min_rating = request.GET.get('min_rating')
-    max_rating = request.GET.get('max_rating')
-
-    if genre:
-        books = books.filter(genre__name__icontains=genre)
-    if author:
-        books = books.filter(author__name__icontains=author)
-    if min_rating:
-        books = books.filter(avg_rating__gte=min_rating)
-    if max_rating:
-        books = books.filter(avg_rating__lte=max_rating)
 
     paginator = Paginator(books, 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'books/book_list.html', {'page_obj': page_obj, 'books': page_obj.object_list, 'authors': authors, 'genres': genres})
+    return render(request, 'books/book_list.html', {
+        'page_obj': page_obj,
+        'books': page_obj.object_list,
+        'authors': authors,
+        'genres': genres
+    })
 
 
 def book_detail(request, pk):
-    book = get_object_or_404(Book, pk=pk)
+
+    book = get_object_or_404(Book.objects.select_related('author', 'genre'), pk=pk)
+
     reviews = book.reviews.select_related('author').all()  # Отримання всіх відгуків з автором
 
-    user_rating = Rating.objects.filter(user=request.user, book=book).first() if request.user.is_authenticated else None
+    ratings = Rating.objects.filter(book=book).select_related('user')
+    rating_dict = {rating.user.id: rating for rating in ratings}
 
     reviews_with_ratings = [
         {
             'review': review,
-            'rating': Rating.objects.filter(user=review.author, book=book).first()
+            'rating': rating_dict.get(review.author.id)
         }
         for review in reviews
     ]
@@ -77,7 +92,7 @@ def book_detail(request, pk):
         comments_form = CommentsForm()
         rating_form = RatingForm()
 
-    return render(request, 'books/book_detail.html', {'book': book,  'reviews_with_ratings': reviews_with_ratings, 'reviews': reviews, 'comments_form': comments_form, 'rating_form': rating_form, 'user_rating': user_rating})
+    return render(request, 'books/book_detail.html', {'book': book,  'reviews_with_ratings': reviews_with_ratings, 'reviews': reviews, 'comments_form': comments_form, 'rating_form': rating_form, 'user_rating': ratings})
 
 
 def edit_rating(request, pk):
@@ -97,7 +112,7 @@ def edit_rating(request, pk):
 
 def create_book(request):
     if request.method == 'POST':
-        form = BookForm(request.POST)
+        form = BookForm(request.POST, request.FILES)
         if form.is_valid():
             book = form.save(commit=False)
             book.created_by = request.user
@@ -114,7 +129,7 @@ def update_book(request, pk):
         return HttpResponseForbidden("Ви не маєте дозволу редагувати цю книгу.")
 
     if request.method == 'POST':
-        form = BookForm(request.POST, instance=book)
+        form = BookForm(request.POST, request.FILES, instance=book)
         if form.is_valid():
             form.save()
             return redirect('book_detail', pk=book.pk)
@@ -123,6 +138,7 @@ def update_book(request, pk):
     return render(request, 'books/book_form.html', {'form': form})
 
 
+@method_decorator(ratelimit(key='ip', rate='10/m', block=True), name='dispatch')
 class BookListCreateView(generics.ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
@@ -130,8 +146,10 @@ class BookListCreateView(generics.ListCreateAPIView):
     filter_backends = [DjangoFilterBackend]
     filterset_class = BookFilter
     pagination_class = MyPageNumberPagination
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
 
 
+@method_decorator(ratelimit(key='ip', rate='10/m', block=True), name='dispatch')
 class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer

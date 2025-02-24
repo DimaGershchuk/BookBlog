@@ -16,30 +16,48 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    author = serializers.StringRelatedField(read_only=True)  # Для відображення імені автора коментаря
+    author = serializers.StringRelatedField(read_only=True)
+    book = serializers.PrimaryKeyRelatedField(queryset=Book.objects.all())
 
     class Meta:
         model = Comments
-        fields = ['id', 'author', 'comment', 'created_at']
+        fields = ['id', 'book', 'author', 'comment', 'created_at']
+
+    def create(self, validated_data):
+        validated_data['author'] = self.context['request'].user
+        return super().create(validated_data)
 
 
 class RatingSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField(read_only=True)  # Виводить ім'я користувача, а не ID
+    user = serializers.StringRelatedField(read_only=True)
+    book = serializers.PrimaryKeyRelatedField(queryset=Book.objects.all())
 
     class Meta:
         model = Rating
-        fields = ['id', 'user', 'rating']
+        fields = ['id', 'book', 'user', 'rating',]
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        book = validated_data.get('book')
+        rating, created = Rating.objects.update_or_create(
+            user=user,
+            book=book,
+            defaults={'rating': validated_data.get('rating')}
+        )
+        return rating
 
 
 class BookSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer()  # Вкладений серіалізатор для автора
-    genre = GenreSerializer()  # Вкладений серіалізатор для жанру
-    reviews = CommentSerializer(many=True, read_only=True)  # Вкладений серіалізатор для коментарів
-    ratings = RatingSerializer(many=True, read_only=True)  # Вкладений серіалізатор для рейтингів
+    author = AuthorSerializer()
+    genre = GenreSerializer()
+    reviews = CommentSerializer(many=True, read_only=True)
+    ratings = RatingSerializer(many=True, read_only=True)
+    image = serializers.ImageField(required=False, allow_null=True)
 
     class Meta:
         model = Book
-        fields = ['id', 'title', 'author', 'genre', 'created_by', 'description', 'average_rating', 'reviews', 'ratings']
+        fields = ['id', 'title', 'author', 'genre', 'created_by', 'description',
+                  'average_rating', 'reviews', 'ratings', 'image']
 
     def create(self, validated_data):
         author_data = validated_data.pop('author')
@@ -61,6 +79,10 @@ class BookSerializer(serializers.ModelSerializer):
         instance.genre = genre
         instance.title = validated_data.get('title', instance.title)
         instance.description = validated_data.get('description', instance.description)
+
+        if 'image' in validated_data:
+            instance.image = validated_data.get('image')
+
         instance.save()
 
         return instance

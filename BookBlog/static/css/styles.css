@@ -68,7 +68,7 @@ header h1 {
 }
 
 .auth-content{
-    flex: 1;
+    flex: 2;
     padding: 20px;
     width: 100%;
 }
@@ -172,7 +172,7 @@ h3 {
 }
 
 .auth-content {
-    max-width: 500px;
+
     margin: 0 auto;
 }
 
@@ -419,85 +419,114 @@ a:hover {
 }
 
 /* Деталі книги */
-.book-detail {
-    background-color: #fff;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+.book-container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 50px;
     margin: 20px auto;
-    max-width: 800px;
+    max-width: 100%;
 }
 
-/* Заголовок книги */
-.book-detail h1 {
-    font-size: 24px;
+.book-info {
+    background-color: #fefefe;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+}
+
+.book-info h1 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.book-info p {
+    font-size: 16px;
     margin-bottom: 10px;
+    line-height: 1.5;
+    color: #555;
 }
 
-/* Інформація про книгу */
-.book-detail p {
-    margin-bottom: 10px;
+.book-info img {
+    max-width: 100%;
+    border-radius: 4px;
+    margin-top: 15px;
 }
 
-/* Список відгуків */
-.book-detail ul {
-    list-style-type: none;
+/* Права колонка: Коментарі та оцінки */
+.book-reviews {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+}
+
+.book-reviews h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.book-reviews ul {
+    list-style: none;
     padding: 0;
+    margin: 0;
 }
 
-.book-detail li {
-    border-bottom: 1px solid #ddd;
-    padding: 10px 0;
+.book-reviews li {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 15px 0;
 }
 
-.book-detail li:last-child {
+.book-reviews li:last-child {
     border-bottom: none;
 }
 
-/* Рейтинг */
-.book-detail strong {
-    display: block;
-    font-size: 18px;
-    margin-bottom: 5px;
-    color: #007bff;
+.book-reviews li p {
+    font-size: 15px;
+    margin: 5px 0;
+    color: #444;
 }
 
-/* Коментарі */
-.book-detail p {
-    margin: 5px 0;
+.book-reviews li strong {
+    color: #007bff;
     font-size: 16px;
 }
 
-/* Дата коментаря */
-.book-detail em {
-    color: #666;
-    font-style: italic;
+.book-reviews li em {
+    font-size: 14px;
+    color: #888;
 }
 
-/* Форма відгуків */
-.book-detail form {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #f9f9f9;
+.book-reviews form {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #fafafa;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
-.book-detail form h2 {
+.book-reviews form h2 {
     font-size: 20px;
     margin-bottom: 15px;
+    color: #333;
 }
 
-.book-detail form button {
+.book-reviews form button {
     padding: 10px 20px;
     background-color: #007bff;
-    color: #fff;
     border: none;
     border-radius: 4px;
-    cursor: pointer;
+    color: #fff;
     font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.book-detail form button:hover {
+.book-reviews form button:hover {
     background-color: #0056b3;
 }

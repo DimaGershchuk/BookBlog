@@ -3,56 +3,63 @@
 {% block title %}Book details{% endblock %}
 
 {% block content %}
-    <div class="book-detail">
-        <h1>{{ book.title }}</h1>
-        <p>Author: {{ book.author.name }}</p>
-        <p>Genre: {{ book.genre.name }}</p>
-        <p>Avarage rate: {{ book.average_rating }}</p>
-        <p>Description: {{ book.description }}</p>
+    <div class="book-container">
+        <div class="book-info">
+            <h1>{{ book.title }}</h1>
+            <p>Author: {{ book.author.name }}</p>
+            <p>Genre: {{ book.genre.name }}</p>
+            <p>Avarage rate: {{ book.average_rating }}</p>
+            <p>Description: {{ book.description }}</p>
 
-      <h2>Comments:</h2>
-        {% if reviews_with_ratings %}
-            <ul>
-                {% for item in reviews_with_ratings %}
-                    <li>
-                        <p><strong>Coment`s author: {{ item.review.author.username }}</strong></p>
-                        <p>Comment: {{ item.review.comment }}</p>
-                        <p><em>Add : {{ item.review.created_at }}</em></p>
+            {% if book.image %}
+                <img src="{{ book.image.url }}" alt="{{ book.title }}">
+            {% endif %}
 
-                        {% if item.rating %}
-                            <p>Rate : {{ item.rating.rating }}</p>
-                            {% if item.review.author == user %}
-                                <a href="{% url 'edit_rating' item.rating.pk %}">Edit rate</a>
+        </div>
+
+        <div class="book-reviews">
+          <h2>Comments:</h2>
+            {% if reviews_with_ratings %}
+                <ul>
+                    {% for item in reviews_with_ratings %}
+                        <li>
+                            <p><strong>Coment`s author: {{ item.review.author.username }}</strong></p>
+                            <p>Comment: {{ item.review.comment }}</p>
+                            <p><em>Add : {{ item.review.created_at }}</em></p>
+
+                            {% if item.rating %}
+                                <p>Rate : {{ item.rating.rating }}</p>
+                                {% if item.review.author == user %}
+                                    <a href="{% url 'edit_rating' item.rating.pk %}">Edit rate</a>
+                                {% endif %}
+                            {% else %}
+                                <p>This user has not yet rated this book.</p>
                             {% endif %}
-                        {% else %}
-                            <p>This user has not yet rated this book.</p>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>There are no reviews.</p>
-        {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>There are no reviews.</p>
+            {% endif %}
 
+            {% if user.is_authenticated %}
+                <h2>Leave a review:</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ comments_form.as_p }}
+                    <button type="submit">Add review</button>
+                </form>
 
+                <h2>Rate book:</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ rating_form.as_p }}
+                    <button type="submit">Rate</button>
+                </form>
 
-        {% if user.is_authenticated %}
-            <h2>Leave a review:</h2>
-            <form method="post">
-                {% csrf_token %}
-                {{ comments_form.as_p }}
-                <button type="submit">Add review</button>
-            </form>
-
-            <h2>Rate book:</h2>
-            <form method="post">
-                {% csrf_token %}
-                {{ rating_form.as_p }}
-                <button type="submit">Rate</button>
-            </form>
-
-            <!-- Редагування книги -->
-            <a href="{% url 'update_book' pk=book.pk %}">Edit book</a>
-        {% endif %}
+                <!-- Редагування книги -->
+                <a href="{% url 'update_book' pk=book.pk %}">Edit book</a>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}

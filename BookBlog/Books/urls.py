@@ -1,6 +1,7 @@
 from django.urls import path, include
 from .views import book_list, book_detail, edit_rating, create_book, update_book, BookByGenreView, BookListCreateView, BookDetailView, AuthorListCreateView, AuthorDetailView, GenreListCreateView, GenreDetailView, CommentListCreateView, CommentDetailView, RatingListCreateView, RatingDetailView
-
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView
 from rest_framework.routers import DefaultRouter
 
@@ -10,6 +11,7 @@ urlpatterns = [
     path('edit_rating/<int:pk>/', edit_rating, name='edit_rating'),
     path('create/', create_book, name='create_book'),
     path('update/<int:pk>/', update_book, name='update_book'),
+
     path('api/books/genre/<int:genre_id>/', BookByGenreView.as_view(), name='book-by-genre'),
 
     path('api/books/', BookListCreateView.as_view(), name='book-list-create'),
@@ -22,5 +24,9 @@ urlpatterns = [
     path('api/comments/<int:pk>/', CommentDetailView.as_view(), name='comment-detail'),
     path('api/ratings/', RatingListCreateView.as_view(), name='rating-list-create'),
     path('api/ratings/<int:pk>/', RatingDetailView.as_view(), name='rating-detail')
+
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

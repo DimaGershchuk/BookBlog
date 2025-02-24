@@ -6,6 +6,7 @@ from .forms import CustomUserCreationForm, LoginUserForm
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 from rest_framework import viewsets, permissions, generics
+from rest_framework.authentication import TokenAuthentication
 from .models import CustomUser
 from .serializers import CustomUserSerializer, CustomUserCreateSerializer
 from .permissions import IsSuperUserOrReadOnly
@@ -38,6 +39,7 @@ def logout_user(request):
 
 class CustomUserListCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
+    authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsSuperUserOrReadOnly]
 
     def get_serializer_class(self):
@@ -48,6 +50,7 @@ class CustomUserListCreateView(generics.ListCreateAPIView):
 
 class CustomUserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
+    authentication_classes = [TokenAuthentication]
     permission_classes = [IsSuperUserOrReadOnly]
     serializer_class = CustomUserSerializer
 

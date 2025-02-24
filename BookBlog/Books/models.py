@@ -2,6 +2,8 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from Users.models import CustomUser
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
 
 
 class Genre(models.Model):
@@ -22,16 +24,23 @@ class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
-    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='created_books')
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     description = models.TextField()
     average_rating = models.FloatField(null=True, blank=True)
     publication_date = models.DateField(null=True, blank=True)
+    image = models.ImageField(upload_to='images')
+
+    compressed_image = ImageSpecField(
+        source='image',
+        processors=[ResizeToFill(800, 600)],
+        format='JPEG',
+        options={'quality': 80},
+    )
 
     def __str__(self):
         return self.title
 
     def calculate_rating(self):
-        # Обчислює середній рейтинг на основі оцінок
         ratings = self.ratings.all()
         if ratings.exists():
             avg_rating = ratings.aggregate(models.Avg('rating'))['rating__avg']
@@ -50,8 +59,8 @@ class Comments(models.Model):
     def __str__(self):
         return f"{self.author} - {self.book.title}"
 
-    def save(self):
-        super().save()
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
         self.book.calculate_rating()
 
 
