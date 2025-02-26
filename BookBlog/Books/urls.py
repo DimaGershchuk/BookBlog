@@ -1,7 +1,5 @@
 from django.urls import path, include
 from .views import book_list, book_detail, edit_rating, create_book, update_book, BookByGenreView, BookListCreateView, BookDetailView, AuthorListCreateView, AuthorDetailView, GenreListCreateView, GenreDetailView, CommentListCreateView, CommentDetailView, RatingListCreateView, RatingDetailView
-from django.conf import settings
-from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView
 from rest_framework.routers import DefaultRouter
 
@@ -27,6 +25,5 @@ urlpatterns = [
 
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 

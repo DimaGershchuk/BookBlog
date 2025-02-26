@@ -53,12 +53,11 @@ def book_list(request):
     })
 
 
-@cache_page(60 * 15)
 def book_detail(request, pk):
 
     book = get_object_or_404(Book.objects.select_related('author', 'genre'), pk=pk)
 
-    reviews = book.reviews.select_related('author').all()  # Отримання всіх відгуків з автором
+    reviews = book.reviews.select_related('author').all()
 
     ratings = Rating.objects.filter(book=book).select_related('user')
     rating_dict = {rating.user.id: rating for rating in ratings}

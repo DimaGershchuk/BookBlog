@@ -32,9 +32,9 @@ class Book(models.Model):
 
     compressed_image = ImageSpecField(
         source='image',
-        processors=[ResizeToFill(800, 600)],
+        processors=[ResizeToFill(600, 600)],
         format='JPEG',
-        options={'quality': 80},
+        options={'quality': 90},
     )
 
     def __str__(self):
